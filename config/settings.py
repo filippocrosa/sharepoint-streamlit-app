@@ -1,0 +1,18 @@
+import os
+
+# In produzione, useremo os.environ.get("SEGRETO")
+# Per ora usiamo valori statici per lo sviluppo
+
+class Config:
+    APP_NAME = "Portale Analisi Dati"
+    MAX_LOGIN_ATTEMPTS = 3
+    
+    # Lista utenti abilitati
+    ALLOWED_USERS = [
+        "cliente@azienda.com",
+        "admin@tuaazienda.com",
+        "test@test.com"
+    ]
+
+    # Configurazione Log
+    LOG_FILE = "security.log"
