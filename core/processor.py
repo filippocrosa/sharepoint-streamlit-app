@@ -1,7 +1,6 @@
 import time
 import io
 import zipfile
-import logging
 from docx import Document
 import openpyxl
 import re
@@ -13,6 +12,9 @@ import os
 import tempfile
 import pythoncom  # Necessario per il threading di Windows
 import win32com.client as win32
+
+from config.log_utils import get_logger
+logging = get_logger()
 
 
 
@@ -213,7 +215,7 @@ def check_integrity(excel_file, placehoders: set[str]):
                 values_of_row[placeholder] = convert_cell(cell_got)                            
                 logging.debug(f"Row {row[0].row}: inserted {placeholder} = {values_of_row[placeholder]}")
         except Exception as e:
-            dict_errors[row[0].row] = e
+            dict_errors[row[0].row] = str(e)
             logging.warning(f"Error found in excel file. {e}")
             continue
         dict_to_return[row[0].row] = values_of_row
@@ -402,7 +404,7 @@ def generate_final_zip(word_file, campo_nome_file, righe_excel, placeholders_set
                     doc_word.SaveAs(path_pdf, FileFormat=17)
                     
                     doc_word.Close()
-                    logging.info(f"PDF: Convertito {os.path.basename(path_pdf)}")
+                    logging.debug(f"PDF: Convertito {os.path.basename(path_pdf)}")
                     
                 except Exception as e:
                     logging.warning(f"PDF ERROR: Cannot convert {path_docx}: {e}")

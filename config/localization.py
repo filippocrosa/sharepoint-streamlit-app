@@ -1,7 +1,9 @@
 import locale
-import logging
 import platform
 import streamlit as st
+
+from config.log_utils import get_logger
+logging = get_logger()
 
 @st.cache_resource
 def setup_app_locale():

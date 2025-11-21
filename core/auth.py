@@ -1,6 +1,8 @@
 import random
-import logging
 from config.settings import Config
+
+from config.log_utils import get_logger
+logging = get_logger()
 
 def generate_otp() -> str:
     """Genera un codice a 6 cifre."""

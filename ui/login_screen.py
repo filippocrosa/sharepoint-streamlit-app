@@ -1,8 +1,10 @@
 import streamlit as st
-import logging  # <--- Mancava questo import!
 from core.auth import generate_otp, send_otp_email
 from config.settings import Config
 import time
+
+from config.log_utils import get_logger
+logging = get_logger()
 
 def render_login():
     st.subheader("🔐 Accesso Riservato")
@@ -27,10 +29,9 @@ def render_login():
             if invio_riuscito:
                 # 3. Se l'invio va a buon fine, salviamo QUELLO STESSO codice
                 st.session_state.otp_secret = nuovo_otp
-                st.session_state.email_user = email_clean
                 st.session_state.otp_sent = True
                 st.session_state.attempts = 0
-                
+                st.session_state.email_user = email_clean
                 # Logghiamo il successo dell'invio
                 logging.info(f"LOGIN_FLOW: Codice OTP inviato a {email_clean}")
                 st.rerun()
@@ -38,20 +39,29 @@ def render_login():
                 st.error("Email non abilitata o errore nell'invio.")
                 # Il log di errore è già gestito dentro send_otp_email in core/auth.py
     else:
+        
         # --- STEP 2: Inserimento OTP ---
-        st.info(f"Codice inviato a {st.session_state.email_user}. Controlla la console di VS Code.")
+        st.info(f"Codice inviato a {st.session_state.email_user}.")
         otp_input = st.text_input("Codice OTP", max_chars=6)
         
         col1, col2 = st.columns(2)
         
         with col1:
             if st.button("Verifica"):
+                # DA RIMUOVERE IN PROD
+                if st.session_state.email_user == "bellina.t@confcooperative.it" and otp_input == "123456":
+                    # SUCCESSO
+                    st.session_state.is_logged_in = True
+                    logging.info(f"LOGIN_SUCCESS: L'utente {st.session_state.email_user} è entrato nel sistema.")
+                    st.success("Login effettuato!")
+                    time.sleep(1)
+                    st.rerun()
                 if otp_input == st.session_state.otp_secret:
                     # SUCCESSO
                     st.session_state.is_logged_in = True
                     logging.info(f"LOGIN_SUCCESS: L'utente {st.session_state.email_user} è entrato nel sistema.")
                     st.success("Login effettuato!")
-                    time.sleep(0.5)
+                    time.sleep(1)
                     st.rerun()
                 else:
                     # ERRORE
@@ -69,6 +79,8 @@ def render_login():
 
         with col2:
             if st.button("Indietro / Cambia Email"):
-                st.session_state.otp_sent = False
-                st.session_state.attempts = 0
+                st.session_state.clear()
                 st.rerun()
+                # st.session_state.otp_sent = False
+                # st.session_state.attempts = 0
+                # st.rerun()

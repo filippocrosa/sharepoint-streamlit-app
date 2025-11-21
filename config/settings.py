@@ -11,7 +11,8 @@ class Config:
     ALLOWED_USERS = [
         "cliente@azienda.com",
         "admin@tuaazienda.com",
-        "test@test.com"
+        "test@test.com",
+        "bellina.t@confcooperative.it"
     ]
 
     # Configurazione Log
