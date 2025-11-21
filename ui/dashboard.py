@@ -1,8 +1,10 @@
 import streamlit as st
-import logging
 import time
 # Importiamo le 3 funzioni separate
 from core.processor import check_consistency, check_integrity, generate_final_zip
+
+from config.log_utils import get_logger
+logging = get_logger()
 
 def reset_state():
     """
@@ -55,6 +57,7 @@ def render_dashboard():
     with st.sidebar:
         st.write(f"👤 **{user}**")
         if st.button("Logout"):
+            logging.info("LOGOUT")
             st.session_state.clear()
             st.rerun()
 
@@ -237,6 +240,7 @@ def render_dashboard_2():
     with st.sidebar:
         st.write(f"👤 **{user}**")
         if st.button("Logout"):
+            logging.info("LOGOUT")
             st.session_state.clear()
             st.rerun()
 

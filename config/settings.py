@@ -4,7 +4,7 @@ import os
 # Per ora usiamo valori statici per lo sviluppo
 
 class Config:
-    APP_NAME = "Portale Analisi Dati"
+    APP_NAME = "Portale creazione lettere"
     MAX_LOGIN_ATTEMPTS = 3
     
     # Lista utenti abilitati
